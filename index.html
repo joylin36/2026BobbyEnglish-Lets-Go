@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>巴比美語補習班 | 課程報名表</title>
+    <style>
+        :root {
+            --uci-blue: #1b3d6d;
+            --uci-gold: #fecc07;
+        }
+        
+        * {
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Helvetica, Arial, 'PingFang TC', 'Heiti TC', 'Microsoft JhengHei', sans-serif;
+        }
+
+        body {
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        /* 頁面容器設計 */
+        .page-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .page {
+            padding: 30px 40px;
+        }
+
+        /* 表頭與聯絡資訊 */
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            border-bottom: 3px solid var(--uci-blue);
+            padding-bottom: 15px;
+        }
+
+        .title-area {
+            flex: 1;
+            padding-right: 20px;
+            min-width: 0;
+        }
+
+        .main-title {
+            color: var(--uci-blue);
+            font-size: 21px;
+            margin: 0 0 5px 0;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .sub-title {
+            color: var(--uci-blue);
+            font-size: 15px;
+            margin: 0 0 15px 0;
+            font-weight: normal;
+        }
+
+        .contact-info {
+            font-size: 11px;
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .contact-info p {
+            margin: 2px 0;
+        }
+
+        /* 照片上傳框優化 */
+        .photo-box {
+            width: 2in;
+            height: 2in;
+            border: 2px solid var(--uci-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 12px;
+            color: var(--uci-blue);
+            flex-shrink: 0;
+            background-color: #fafafa;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: background-color 0.2s;
+        }
+
+        .photo-box:hover {
+            background-color: rgba(27, 61, 109, 0.05);
+        }
+
+        /* 隱藏預設網頁檔案按鈕 */
+        .photo-file-input {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        /* 照片預覽圖片樣式 */
+        .preview-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* 表格共用設定 */
+        .section-title {
+            background-color: var(--uci-blue);
+            color: #fff;
+            padding: 8px 12px;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 20px 0 10px 0;
+            display: inline-block;
+            border-radius: 4px 4px 0 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+            font-size: 13px;
+            table-layout: fixed;
+        }
+
+        th, td {
+            border: 1px solid var(--uci-blue);
+            padding: 5px;
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: #f0f4f8;
+            color: var(--uci-blue);
+            text-align: right;
+            width: 15%;
+            padding-right: 10px;
+            white-space: nowrap;
+        }
+
+        td {
+            height: 35px;
+            position: relative;
+        }
+
+        /* 輸入框優化 */
+        .text-input {
+            border: none;
+            background: transparent;
+            width: 100%;
+            height: 100%;
+            outline: none;
+            font-family: inherit;
+            font-size: inherit;
+            color: inherit;
+            padding: 4px;
+        }
+
+        .text-input:focus {
+            background-color: rgba(254, 204, 7, 0.1);
+        }
+
+        /* 單選/複選框排列 */
+        .radio-group, .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding-left: 5px;
+            height: 100%;
+        }
+
+        .radio-group label, .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        /* 課程選擇特定表格 */
+        .course-table th {
+            text-align: center;
+            background-color: var(--uci-blue);
+            color: #fff;
+        }
+        
+        .course-table td {
+            padding: 8px 10px;
+        }
+        
+        .course-table .check-col { text-align: center; width: 10%; }
+        .course-table .name-col { width: 50%; font-weight: bold; }
+        .course-table .time-col { width: 40%; color: #444; }
+
+        /* 優惠區塊 */
+        .offer-box {
+            background-color: rgba(254, 204, 7, 0.2);
+            border: 1px dashed var(--uci-gold);
+            padding: 10px 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #b38f00;
+            text-align: center;
+        }
+
+        /* 第二頁條款樣式 */
+        .terms-header {
+            text-align: center;
+            color: var(--uci-blue);
+            border-bottom: 2px solid var(--uci-blue);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .privacy-statement {
+            background-color: #f0f4f8;
+            padding: 12px;
+            border-left: 4px solid var(--uci-blue);
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .terms-list {
+            font-size: 13px;
+            color: #444;
+        }
+
+        .terms-list .term-item {
+            margin-bottom: 15px;
+            padding-left: 20px;
+            text-indent: -20px;
+        }
+
+        .terms-list strong {
+            color: var(--uci-blue);
+        }
+
+        .agreement-text {
+            text-align: center;
+            font-size: 15px;
+            font-weight: bold;
+            color: #c00;
+            margin: 30px 0;
+        }
+
+        /* 簽名區 */
+        .signature-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .signature-box {
+            flex: 1;
+            min-width: 280px;
+            border: 1px solid var(--uci-blue);
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #fafbfc;
+            box-sizing: border-box;
+        }
+
+        .signature-row {
+            display: flex;
+            align-items: flex-end;
+            margin-bottom: 15px;
+        }
+
+        .signature-row span {
+            margin-right: 10px;
+            color: var(--uci-blue);
+            font-weight: bold;
+            font-size: 13px;
+            line-height: 1.2;
+        }
+
+        .signature-input {
+            border: none;
+            border-bottom: 1px solid #666;
+            background: transparent;
+            flex: 1;
+            min-width: 50px;
+            outline: none;
+            font-size: 16px;
+            padding: 2px 5px;
+        }
+
+        /* 提交按鈕 */
+        .submit-btn-container {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .submit-btn {
+            background-color: var(--uci-gold);
+            color: var(--uci-blue);
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        /* 輔助類別 */
+        .w-full { width: 100%; }
+        
+        /* 列印與防跑版設定 */
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 10mm 15mm;
+            }
+            body {
+                background-color: transparent;
+                padding: 0;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .page-container {
+                box-shadow: none;
+                max-width: 100%;
+            }
+            .page1 {
+                break-after: page;
+            }
+            .page {
+                padding: 0;
+            }
+            .submit-btn-container, .submit-btn {
+                display: none !important;
+            }
+            input {
+                outline: none !important;
+            }
+        }
+
+        /* 手機版適應 */
+        @media (max-width: 600px) {
+            .header-section {
+                flex-direction: column-reverse;
+                align-items: center;
+                text-align: center;
+            }
+            .main-title {
+                white-space: normal;
+                font-size: 20px;
+            }
+            .photo-box {
+                margin-bottom: 15px;
+            }
+            th, td {
+                display: block;
+                width: 100%;
+                text-align: left;
+            }
+            th {
+                background-color: var(--uci-blue);
+                color: #fff;
+            }
+            .signature-section {
+                flex-direction: column;
+            }
+            .course-table th, .course-table td {
+                display: table-cell;
+            }
+            .course-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-container">
+    <form id="enrollmentForm" action="https://formsubmit.co/bobbyenglishschool@gmail.com" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_subject" value="【新學員報名通知】巴比美語補習班">
+        
+        <input type="hidden" id="printLinkInput" name="查看並印出完整A4報名表" value="">
+
+        <div class="page page1">
+            <div class="header-section">
+                <div class="title-area">
+                    <h1 class="main-title">巴比美語補習班 ｜ Let's Go 兒童美語課程報名表</h1>
+                    <h2 class="sub-title">Bobby English School - Let's Go Courses Enrollment Form</h2>
+                    <div class="contact-info">
+                        <p><strong>電話 / Phone：</strong>03-2161338</p>
+                        <p><strong>信箱 / E-mail：</strong>bobbyenglishschool@gmail.com</p>
+                        <p><strong>地址 / Address：</strong>330 桃園市桃園區莊二街156號1樓<br>1F., No. 156, Zhuang'er St., Taoyuan Dist., Taoyuan City 330, Taiwan</p>
+                        <p><strong>立案字號 / Registration No.：</strong>府教社字第0930131461號 / Fu-Jiao-She-Zi No. 0930131461</p>
+                    </div>
+                </div>
+                
+                <label class="photo-box" id="photoContainer">
+                    <div id="uploadText">
+                        點擊上傳照片<br>Click to Upload<br>(2-inch)
+                    </div>
+                    <input type="file" name="student_photo" accept="image/*" class="photo-file-input" onchange="showImagePreview(this)">
+                </label>
+            </div>
+
+            <div class="section-title">基本資料與聯絡方式 Basic & Contact Information</div>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>中文姓名</th>
+                        <td><input type="text" name="student_name_zh" class="text-input" placeholder="Student Name (CH)" required></td>
+                        <th>英文姓名</th>
+                        <td><input type="text" name="student_name_en" class="text-input" placeholder="Student Name (EN)" required></td>
+                        <th>性別</th>
+                        <td>
+                            <div class="radio-group" style="justify-content: center;">
+                                <label><input type="radio" name="gender" value="M" required> 男/M</label>
+                                <label><input type="radio" name="gender" value="F" required> 女/F</label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>出生日期</th>
+                        <td><input type="date" name="dob" class="text-input" required></td>
+                        <th>就讀學校</th>
+                        <td><input type="text" name="school" class="text-input" placeholder="School"></td>
+                        <th>年級</th>
+                        <td>
+                            <div style="display: flex; align-items: center; padding: 0 5px; height: 100%;">
+                                第 <input type="text" name="grade" style="border: none; border-bottom: 1px solid #333; width: 40px; text-align: center; margin: 0 5px; background: transparent; outline: none;"> 年級
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>家長姓名</th>
+                        <td><input type="text" name="parent_name" class="text-input" placeholder="Parent Name" required></td>
+                        <th>與學生關係</th>
+                        <td><input type="text" name="relation" class="text-input" placeholder="Relationship"></td>
+                        <th>聯絡電話</th>
+                        <td><input type="tel" name="phone" class="text-input" pattern="[0-9]*" inputmode="numeric" placeholder="Phone Number (Numbers Only)" required></td>
+                    </tr>
+                    <tr>
+                        <th>電子信箱</th>
+                        <td colspan="3"><input type="email" name="email" class="text-input" placeholder="E-mail Address"></td>
+                        <th>LINE ID</th>
+                        <td><input type="text" name="line_id" class="text-input" placeholder="LINE ID"></td>
+                    </tr>
+                    <tr>
+                        <th>通訊地址</th>
+                        <td colspan="5"><input type="text" name="address" class="text-input" placeholder="Mailing Address" required></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="section-title">課程選擇 Course Selection</div>
+            <table class="course-table">
+                <thead>
+                    <tr>
+                        <th class="check-col">勾選 Check</th>
+                        <th class="name-col">課程名稱 / Course Name</th>
+                        <th class="time-col">上課時間 / Class Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="check-col"><input type="checkbox" name="course_letsgo12" value="yes"></td>
+                        <td class="name-col">兒童初階美語 (Bobby全美語教學) Let's Go 1, 2</td>
+                        <td class="time-col">Mon., Wed., Fri. 1:30 PM - 3:30 PM</td>
+                    </tr>
+                    <tr>
+                        <td class="check-col"><input type="checkbox" name="course_letsgo34" value="yes"></td>
+                        <td class="name-col">兒童中階美語 (Bobby & Joy 中英教學) Let's Go 3, 4</td>
+                        <td class="time-col">Mon., Wed., Fri. 4:30 PM - 6:30 PM</td>
+                    </tr>
+                    <tr>
+                        <td class="check-col"><input type="checkbox" name="course_letsgo56" value="yes"></td>
+                        <td class="name-col">兒童高階美語 (Bobby & Joy 中英教學) Let's Go 5, 6</td>
+                        <td class="time-col">Mon., Wed., Fri. 4:30 PM - 6:30 PM</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="offer-box">
+                🌟 【早鳥優惠】開課前一個月報名並完成繳費，享 8 折優惠！<br>
+                <span style="font-size: 13px; font-weight: normal;">(Early Bird Offer: Register and pay one month before class starts to enjoy a 20% discount!)</span>
+            </div>
+
+            <div class="section-title">補習班行政作業欄 Office Use Only</div>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>應繳總金額</th>
+                        <td><input type="text" name="total_amount" class="text-input" placeholder="$"></td>
+                        <th>付款方式</th>
+                        <td colspan="3">
+                            <div class="radio-group" style="flex-wrap: wrap;">
+                                <label><input type="radio" name="payment_method" value="Cash"> 現金</label>
+                                <label style="margin-left: 15px;"><input type="radio" name="payment_method" value="Transfer"> 轉帳 後五碼：</label>
+                                <input type="text" name="transfer_code" style="border: none; border-bottom: 1px solid #333; width: 80px; background: transparent; outline: none; text-align: center;">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>經辦人員</th>
+                        <td><input type="text" name="staff_name" class="text-input"></td>
+                        <th>收據編號</th>
+                        <td><input type="text" name="receipt_no" class="text-input"></td>
+                        <th>教材發放</th>
+                        <td>
+                            <div class="radio-group">
+                                <label><input type="radio" name="materials_status" value="Given"> 已發放</label>
+                                <label><input type="radio" name="materials_status" value="Pending"> 待發放</label>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="page page2">
+            <h2 class="terms-header">報名需知與家長同意條款<br><span style="font-size: 16px; font-weight: normal;">Terms & Conditions (Bobby English School - Enrollment Policies)</span></h2>
+            
+            <div class="privacy-statement">
+                <strong>個資保護聲明 / Privacy Statement：</strong><br>
+                本班收集之個人資料僅供課程聯繫與行政管理使用，絕不外洩。<br>
+                All personal information collected is strictly for course communication and administrative purposes and will be kept confidential.
+            </div>
+
+            <div class="terms-list">
+                <div class="term-item">
+                    <strong>1. 退費規定 Refund Policy：</strong><br>
+                    依各縣市政府教育局主管機關短期補習班設立及管理自治條例之退費標準辦理。<br>
+                    <span style="color: #666;">(Refunds are processed according to the regulations of the local Education Bureau.)</span>
+                </div>
+                <div class="term-item">
+                    <strong>2. 請假與補課 Leave & Make-up Classes：</strong><br>
+                    學生因故無法出席，請於上課前兩小時透過 LINE 或電話請假。本班將安排線上補課資源或進度輔導，不另退費。<br>
+                    <span style="color: #666;">(Please notify us via LINE or phone 2 hours prior to class if absent. Make-up resources or tutoring will be provided. No refunds for missed classes.)</span>
+                </div>
+                <div class="term-item">
+                    <strong>3. 上課安全 Safety Rules：</strong><br>
+                    為維護學生安全，請家長於下課後15分鐘內至補習班接送學生。若有特殊接送安排請提前告知。<br>
+                    <span style="color: #666;">(For safety, please pick up your child within 15 mins after class. Inform us of any special pick-up arrangements in advance.)</span>
+                </div>
+                <div class="term-item">
+                    <strong>4. 肖像權授權 Portrait Rights：</strong><br>
+                    報名即視為同意本補習班於教學活動中進行拍照或錄影，其影像僅作為內部教學記錄、學習成果展示或招生推廣使用。<br>
+                    <span style="color: #666;">(Enrollment implies consent to photo/video recording during class for internal records, showcasing, or promotional use.)</span>
+                </div>
+            </div>
+
+            <div class="agreement-text">
+                本人已詳細閱讀並同意上述條款與課程規定。<br>
+                I have read, understood, and agree to the terms and conditions above.
+            </div>
+
+            <div class="signature-section">
+                <div class="signature-box">
+                    <div class="signature-row">
+                        <span>家長/監護人簽名<br>Parent/Guardian Signature</span>
+                        <input type="text" name="parent_signature" class="signature-input" required>
+                    </div>
+                    <div class="signature-row">
+                        <span>日期 Date</span>
+                        <input type="date" name="parent_sig_date" class="signature-input" required>
+                    </div>
+                </div>
+
+                <div class="signature-box">
+                    <div class="signature-row">
+                        <span>承辦老師簽章<br>Staff/Teacher Signature</span>
+                        <input type="text" name="teacher_signature" class="signature-input">
+                    </div>
+                    <div class="signature-row">
+                        <span>日期 Date</span>
+                        <input type="date" name="teacher_sig_date" class="signature-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="submit-btn-container">
+                <button type="submit" class="submit-btn">送出報名表 / Submit Form</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+// 照片上傳即時預覽
+function showImagePreview(input) {
+    const container = document.getElementById('photoContainer');
+    const uploadText = document.getElementById('uploadText');
+    
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            uploadText.style.display = 'none';
+            const oldImg = container.querySelector('.preview-img');
+            if (oldImg) oldImg.remove();
+            
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.className = 'preview-img';
+            container.appendChild(img);
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+// 🌟 第一與第二部分：網頁載入時自動解析並填入 + 判斷是否自動列印
+document.addEventListener("DOMContentLoaded", function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    urlParams.forEach((value, key) => {
+        const inputs = document.querySelectorAll(`[name="${key}"]`);
+        
+        inputs.forEach(input => {
+            if (input.type === 'radio') {
+                if (input.value === value) input.checked = true;
+            } else if (input.type === 'checkbox') {
+                if (value === 'yes' || value === 'true' || value === 'on') input.checked = true;
+            } else if (input.type !== 'file') {
+                input.value = value;
+            }
+        });
+        
+        // 照片網址自動還原至相框
+        if (key === 'student_photo' && (value.startsWith('http://') || value.startsWith('https://'))) {
+            const container = document.getElementById('photoContainer');
+            const uploadText = document.getElementById('uploadText');
+            if (container && uploadText) {
+                uploadText.style.display = 'none';
+                const oldImg = container.querySelector('.preview-img');
+                if (oldImg) oldImg.remove();
+                
+                const img = document.createElement('img');
+                img.src = value;
+                img.className = 'preview-img';
+                container.appendChild(img);
+            }
+        }
+    });
+
+    // 🌟 自動列印黑魔法：如果網址參數帶有 auto_print=true，就直接呼叫列印！
+    if (urlParams.get('auto_print') === 'true') {
+        // 給瀏覽器半秒鐘的緩衝時間來渲染圖片和文字，隨後自動彈出列印
+        setTimeout(() => {
+            window.print();
+        }, 500);
+    }
+});
+
+// 🌟 第三部分：家長按下送出按鈕時，動態捕捉全欄位，生成「自動列印專用網址」一起寄給老師
+document.getElementById('enrollmentForm').addEventListener('submit', function(e) {
+    // 建立一個網址參數產生器
+    const params = new URLSearchParams();
+    
+    // 把目前的網址（不含舊參數）抓出來作為基地
+    const baseUrl = window.location.origin + window.location.pathname;
+    
+    // 撈出表單內所有的 input 元件
+    const formElements = this.elements;
+    
+    for (let i = 0; i < formElements.length; i++) {
+        const el = formElements[i];
+        if (!el.name || el.type === 'file' || el.type === 'submit' || el.name.startsWith('_')) continue;
+        
+        if (el.type === 'radio') {
+            if (el.checked) params.append(el.name, el.value);
+        } else if (el.type === 'checkbox') {
+            if (el.checked) params.append(el.name, 'yes');
+        } else {
+            if (el.value) params.append(el.name, el.value);
+        }
+    }
+    
+    // 🌟 關鍵核心：在網址最後硬補上 &auto_print=true 暗號
+    params.append('auto_print', 'true');
+    
+    // 組合出終極長網址
+    const finalPrintUrl = baseUrl + '?' + params.toString();
+    
+    // 把這個網址塞進我們剛才準備的隱形格子，跟著 Email 一起飛向 FormSubmit
+    document.getElementById('printLinkInput').value = finalPrintUrl;
+});
+</script>
+
+</body>
+</html>
